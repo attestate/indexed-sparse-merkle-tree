@@ -10,12 +10,4 @@ contract TxAggregatorTest is DSTest {
     function setUp() public {
         aggregator = new TxAggregator();
     }
-
-    function test_deposit() public {
-      (bool sent,) = address(aggregator).call{value: 1 ether}(
-        abi.encodeWithSignature("deposit()")
-      );
-      assert(sent);
-      assertEq(address(aggregator).balance, 1 ether);
-    }
 }
