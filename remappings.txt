@@ -1,0 +1,10 @@
+ds-test/=lib/ds-test/src/
+ds-test=lib/ds-test/src/index.sol
+ds-token/=lib/ds-token/src/
+ds-token=lib/ds-token/src/index.sol
+openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
+openzeppelin-contracts=lib/openzeppelin-contracts/contracts/index.sol
+ds-auth/=lib/ds-token/lib/ds-auth/src/
+ds-auth=lib/ds-token/lib/ds-auth/src/index.sol
+ds-math/=lib/ds-token/lib/ds-math/src/
+ds-math=lib/ds-token/lib/ds-math/src/index.sol
