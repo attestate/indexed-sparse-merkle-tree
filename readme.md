@@ -1,6 +1,6 @@
 # HoneyBatcher
 
-> Like the actual animal, but for Ethereum transactions.
+> Like the animal, but for Ethereum transactions.
 
 ## Prerequisites
 
