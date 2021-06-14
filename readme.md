@@ -4,6 +4,10 @@
 
 > Like the animal, but for Ethereum transactions.
 
+## Learn More
+
+- [Introducing Honeybatcher](https://rugpullindex.com/blog#IntroducingHoneybatcher)
+
 ## Prerequisites
 
 - Have [dapptools](https://github.com/dapphub/dapptools#installation) installed
