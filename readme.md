@@ -15,7 +15,7 @@
 ## Run Tests
 
 ```bash
-DAPP_REMAPPINGS=$(cat remappings.txt) dapp test -vv
+dapp test -vv
 ```
 
 ## LICENSE

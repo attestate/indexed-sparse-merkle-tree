@@ -2,7 +2,6 @@ pragma solidity ^0.6.7;
 
 import "ds-test/test.sol";
 import "ds-token/token.sol";
-import "openzeppelin-contracts/cryptography/MerkleProof.sol";
 
 import "./Honeybatcher.sol";
 
