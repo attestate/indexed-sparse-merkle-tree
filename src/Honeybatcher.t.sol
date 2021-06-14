@@ -14,7 +14,7 @@ contract HoneybatcherTest is DSTest {
     token = new DSToken("T");
   }
 
-  function test_deposit() public {
+  function testDeposit() public {
     uint256 amount = 1;
     address tokenAddr = address(token);
     token.mint(amount);

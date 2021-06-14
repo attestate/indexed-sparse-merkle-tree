@@ -18,7 +18,7 @@ contract Honeybatcher {
     uint256 amount
   ) public {
     DSToken(token).transferFrom(msg.sender, address(this), amount);
-    tree.write_insertion(
+    tree.writeInsertion(
       proof,
       abi.encodePacked(token, msg.sender, amount)
     );
