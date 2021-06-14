@@ -1,0 +1,18 @@
+name: "unit tests"
+on:
+  pull_request:
+  push:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.3.4
+      with:
+        submodules: recursive
+    - uses: cachix/install-nix-action@v13
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+    - run: curl https://dapp.tools/install | sh
+    - run: DAPP_REMAPPINGS=$(cat remappings.txt) dapp test -vv
+
+
