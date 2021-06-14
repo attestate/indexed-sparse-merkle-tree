@@ -1,5 +1,7 @@
 # HoneyBatcher
 
+[![unit tests](https://github.com/rugpullindex/honeybatcher/actions/workflows/main.yml/badge.svg)](https://github.com/rugpullindex/honeybatcher/actions/workflows/main.yml)
+
 > Like the animal, but for Ethereum transactions.
 
 ## Prerequisites
