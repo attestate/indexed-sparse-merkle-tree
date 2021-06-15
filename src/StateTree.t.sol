@@ -43,9 +43,9 @@ contract StateTreeTest is DSTest {
 
         bytes32 data = 0x0000000000000000000000000000000000000000000000000000000000000002;
         bytes memory second = abi.encodePacked(data);
-        tree.writeInsertion(proof, second);
-
         bytes32 sLeaf = keccak256(second);
+        tree.writeInsertion(proof, sLeaf);
+
         bytes32 expected = keccak256(abi.encodePacked(currentRoot, sLeaf));
         assertEq(expected, tree.root());
     }
