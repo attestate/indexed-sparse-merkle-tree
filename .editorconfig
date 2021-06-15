@@ -1,0 +1,6 @@
+[*.{js,ejs,yml,json,cpp,cc,h,html,md,sh,sql}]
+indent_style = space
+indent_size = 2
+[*.sol]
+indent_style = space
+indent_size = 4
