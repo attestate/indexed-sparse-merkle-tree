@@ -4,14 +4,13 @@ contract StateTree {
     bytes32 public root;
 
     constructor() public {
-
-            bytes32 zero
+        bytes32 zero
          = 0x0000000000000000000000000000000000000000000000000000000000000000;
         root = keccak256(abi.encodePacked(zero));
     }
 
-    function writeInsertion(bytes32[] memory _proof, bytes memory _leafData)
-        public
+    function writeInsertion(bytes32[] calldata _proof, bytes calldata _leafData)
+        external
     {
         bytes32 leaf = keccak256(_leafData);
         bytes32 newRoot = probeInsertion(_proof, leaf);

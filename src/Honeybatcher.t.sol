@@ -19,18 +19,14 @@ contract HoneybatcherTest is DSTest {
         address tokenAddr = address(token);
         token.mint(amount);
         token.approve(address(hon), amount);
-
-
-            bytes32 left
-         = 0x0000000000000000000000000000000000000000000000000000000000000000;
-        bytes32 hLeft = keccak256(abi.encodePacked(left));
+        bytes32 currentRoot = hon.root();
 
         bytes32 leaf = keccak256(
             abi.encodePacked(token, address(this), amount)
         );
-        bytes32 root = keccak256(abi.encodePacked(hLeft, leaf));
+        bytes32 root = keccak256(abi.encodePacked(currentRoot, leaf));
         bytes32[] memory proof = new bytes32[](1);
-        proof[0] = hLeft;
+        proof[0] = currentRoot;
 
         hon.deposit(proof, tokenAddr, amount);
         assertEq(root, hon.root());

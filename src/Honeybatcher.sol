@@ -13,10 +13,10 @@ contract Honeybatcher {StateTree public tree;
     }
 
     function deposit(
-        bytes32[] memory proof,
+        bytes32[] calldata proof,
         address token,
         uint256 amount
-    ) public {
+    ) external {
         DSToken(token).transferFrom(msg.sender, address(this), amount);
         tree.writeInsertion(proof, abi.encodePacked(token, msg.sender, amount));
         root = tree.root();

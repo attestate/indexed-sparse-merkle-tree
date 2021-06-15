@@ -24,17 +24,29 @@ contract StateTreeTest is DSTest {
         assertTrue(tree.root() != 0);
     }
 
-    function testProbeRightInsertion() public {
+    function testProbeFirstInsertion() public {
         bytes32[] memory proof = new bytes32[](1);
         proof[0] = tree.root();
 
-
-            bytes32 first
-         = 0x0000000000000000000000000000000000000000000000000000000000000002;
+        bytes32 first = 0x0000000000000000000000000000000000000000000000000000000000000002;
         bytes32 fLeaf = keccak256(abi.encodePacked(first));
         bytes32 actual = tree._probeInsertion(proof, fLeaf);
 
         bytes32 expected = keccak256(abi.encodePacked(tree.root(), fLeaf));
         assertEq(expected, actual);
+    }
+
+    function testWriteInsertion() public {
+        bytes32 currentRoot = tree.root();
+        bytes32[] memory proof = new bytes32[](1);
+        proof[0] = currentRoot;
+
+        bytes32 data = 0x0000000000000000000000000000000000000000000000000000000000000002;
+        bytes memory second = abi.encodePacked(data);
+        tree.writeInsertion(proof, second);
+
+        bytes32 sLeaf = keccak256(second);
+        bytes32 expected = keccak256(abi.encodePacked(currentRoot, sLeaf));
+        assertEq(expected, tree.root());
     }
 }
