@@ -1,6 +1,7 @@
 # HoneyBatcher
 
 [![unit tests](https://github.com/rugpullindex/honeybatcher/actions/workflows/main.yml/badge.svg)](https://github.com/rugpullindex/honeybatcher/actions/workflows/main.yml)
+[![lint: prettier-solidity](https://github.com/rugpullindex/honeybatcher/actions/workflows/lint.yml/badge.svg)](https://github.com/rugpullindex/honeybatcher/actions/workflows/lint.yml)
 
 > Like the animal, but for Ethereum transactions.
 
