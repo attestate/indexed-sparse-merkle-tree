@@ -12,7 +12,8 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - run: npx prettier --list-different 'src/**/*.sol'
+    - run: npm install prettier prettier-plugin-solidity
+    - run: npx prettier --write 'src/**/*.sol'
 
 
 

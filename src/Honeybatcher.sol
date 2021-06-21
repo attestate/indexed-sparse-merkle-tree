@@ -8,7 +8,7 @@ contract Honeybatcher {
     bytes32 public root;
 
     constructor() public {
-		root = StateTree.getEmpty();
+        root = StateTree.getEmpty();
     }
 
     function deposit(
@@ -26,7 +26,7 @@ contract Honeybatcher {
         address token,
         uint256 amount
     ) external {
-        bytes32 leaf =  keccak256(abi.encodePacked(token, msg.sender, amount));
+        bytes32 leaf = keccak256(abi.encodePacked(token, msg.sender, amount));
         bytes32 actual = StateTree.compute(proof, leaf);
         require(actual == root);
 
