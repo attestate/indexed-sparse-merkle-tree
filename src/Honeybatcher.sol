@@ -16,7 +16,10 @@ contract Honeybatcher {
         address token,
         uint256 amount
     ) external {
-        DSToken(token).transferFrom(msg.sender, address(this), amount);
+        require(
+            DSToken(token).transferFrom(msg.sender, address(this), amount),
+            "hb-deposit-transferFrom-fail"
+        );
         bytes32 leaf = keccak256(abi.encodePacked(token, msg.sender, amount));
         root = StateTree.compute(proof, leaf);
     }
@@ -28,13 +31,16 @@ contract Honeybatcher {
     ) external {
         bytes32 leaf = keccak256(abi.encodePacked(token, msg.sender, amount));
         bytes32 actual = StateTree.compute(proof, leaf);
-        require(actual == root);
+        require(actual == root, "hb-withdraw-compute-fail");
 
         uint256 newAmount = 0;
         root = StateTree.compute(
             proof,
             keccak256(abi.encodePacked(token, msg.sender, newAmount))
         );
-        DSToken(token).transfer(msg.sender, amount);
+        require(
+            DSToken(token).transfer(msg.sender, amount),
+            "hb-withdraw-transfer-fail"
+        );
     }
 }
