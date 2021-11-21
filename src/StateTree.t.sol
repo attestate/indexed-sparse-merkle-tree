@@ -82,4 +82,46 @@ contract StateTreeTest is DSTest {
 		}
 		assertEq(NEXT_ROOT, expectedRoot);
 	}
+
+	function testFillUp() public {
+		uint8 DEPTH = 8;
+
+	    bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
+		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
+		bytes32 ZERO_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
+		bytes32 ZERO_LEAF_HASH = keccak256(abi.encode(ZERO_LEAF));
+
+        bytes32[] memory zeros = new bytes32[](DEPTH);
+        bytes32 hashZeros = ZERO_LEAF_HASH;
+        zeros[0] = hashZeros;
+        for(uint8 n = 1; n < DEPTH; n++) {
+            hashZeros = keccak256(abi.encode(hashZeros, hashZeros));
+            zeros[n] = hashZeros;
+        }
+
+        bytes32[] memory ones = new bytes32[](DEPTH);
+        bytes32 hashOnes = LEAF_HASH;
+        ones[0] = hashOnes;
+        for(uint8 n = 1; n < DEPTH; n++) {
+            hashOnes = keccak256(abi.encode(hashOnes, hashOnes));
+            ones[n] = hashOnes;
+        }
+
+        bytes32 prevRoot = StateTree.empty();
+        for(uint8 i = 0; i < (2**DEPTH)-1; i++) {
+		    bytes32[] memory proofs = new bytes32[](DEPTH);
+
+            uint8 pointer = i;
+            for(uint j = 0; j < DEPTH; j++) {
+                if(pointer % 2 == 0) {
+                    proofs[j] = zeros[j];
+                } else {
+                    proofs[j] = ones[j];
+                }
+                pointer = pointer / 2;
+            }
+
+		    prevRoot = StateTree.write(proofs, i, LEAF_HASH, ZERO_LEAF_HASH, prevRoot);
+        }
+	}
 }

@@ -3,7 +3,7 @@ pragma solidity ^0.8.6;
 library StateTree {
     uint8 constant DEPTH = 8;
 
-	function get(uint8 level) internal pure returns (bytes32) {
+	function get(uint8 _level) internal pure returns (bytes32) {
         bytes32[DEPTH+1] memory hashes;
         hashes[
             0
@@ -32,7 +32,7 @@ library StateTree {
         hashes[
             8
         ] = 0xe1cea92ed99acdcb045a6726b2f87107e8a61620a232cf4d7d5b5766b3952e10;
-        return hashes[level];
+        return hashes[_level];
     }
 
     function empty() internal pure returns (bytes32) {
@@ -68,11 +68,8 @@ library StateTree {
       uint8 _index,
       bytes32 _leaf
     ) internal pure returns (bytes32) {
-        require(_index <= 2**DEPTH, "_index can't be bigger than tree size");
-		require(
-			_proofs.length <= DEPTH,
-			"_proof length can't be greater than tree depth"
-		);
+        require(_index < (2**DEPTH) - 1, "_index bigger than tree size");
+        require(_proofs.length <= DEPTH, "_proofs.length needs to be tree's depth");
 		bytes32 hash = _leaf;
 
      	for (uint8 i = 0; i < _proofs.length; i++) {
