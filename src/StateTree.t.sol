@@ -43,7 +43,8 @@ contract StateTreeTest is DSTest {
 
 
 	function testComputeInsertFirst() public {
-		bytes32[] memory proofs = new bytes32[](7);
+		uint8 DEPTH = 8;
+		bytes32[] memory proofs = new bytes32[](DEPTH);
      	for (uint8 i = 0; i < proofs.length; i++) {
 			proofs[i] = StateTree.get(i+1);
 		}
@@ -125,7 +126,7 @@ contract StateTreeTest is DSTest {
         }
 	}
 
-    function testHijackingHash() public {
+    function testFailHijackingHash() public {
 		bytes32[] memory proofs = new bytes32[](0);
 
 	    bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000001337;
@@ -133,7 +134,6 @@ contract StateTreeTest is DSTest {
 		bytes32 ZERO_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
 		bytes32 ZERO_LEAF_HASH = keccak256(abi.encode(ZERO_LEAF));
 
-        bytes32 prevRoot = StateTree.empty();
 	    bytes32 newRoot = StateTree.write(proofs, 0, LEAF_HASH, ZERO_LEAF_HASH, ZERO_LEAF_HASH);
         assertEq(newRoot, LEAF_HASH);
     }

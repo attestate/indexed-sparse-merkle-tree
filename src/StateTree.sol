@@ -69,7 +69,7 @@ library StateTree {
       bytes32 _leaf
     ) internal pure returns (bytes32) {
         require(_index < (2**DEPTH) - 1, "_index bigger than tree size");
-        require(_proofs.length <= DEPTH, "_proofs.length needs to be tree's depth");
+        require(_proofs.length == DEPTH, "_proofs.length needs to be tree's depth");
 		bytes32 hash = _leaf;
 
      	for (uint8 i = 0; i < _proofs.length; i++) {
