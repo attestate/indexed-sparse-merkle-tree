@@ -124,4 +124,17 @@ contract StateTreeTest is DSTest {
 		    prevRoot = StateTree.write(proofs, i, LEAF_HASH, ZERO_LEAF_HASH, prevRoot);
         }
 	}
+
+    function testHijackingHash() public {
+		bytes32[] memory proofs = new bytes32[](0);
+
+	    bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000001337;
+		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
+		bytes32 ZERO_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
+		bytes32 ZERO_LEAF_HASH = keccak256(abi.encode(ZERO_LEAF));
+
+        bytes32 prevRoot = StateTree.empty();
+	    bytes32 newRoot = StateTree.write(proofs, 0, LEAF_HASH, ZERO_LEAF_HASH, ZERO_LEAF_HASH);
+        assertEq(newRoot, LEAF_HASH);
+    }
 }
