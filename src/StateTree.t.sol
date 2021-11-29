@@ -253,20 +253,18 @@ contract StateTreeTest is DSTest {
 		bytes32 PREV_LEAF_HASH = keccak256(abi.encode(PREV_LEAF));
 
 		bytes32 ROOT1 = StateTree.empty();
-		bytes32 ROOT2 = StateTree.write(proofs, 0, NEXT_LEAF_HASH, PREV_LEAF_HASH, ROOT1);
+		bytes32 ROOT2 = StateTree.write(proofs, 0, 0, NEXT_LEAF_HASH, PREV_LEAF_HASH, ROOT1);
 
+        uint8 bits = genMapVal(1, 0);
 		bytes32[] memory proofs1 = new bytes32[](1);
         proofs1[0] = NEXT_LEAF_HASH;
-		bytes32 ROOT3 = StateTree.write(proofs1, 1, NEXT_LEAF_HASH, PREV_LEAF_HASH, ROOT2);
-        // NOTE: Now, we'd like to go back to leaf of index 0 and update it's
-        // value e.g. from "1" to "2". But since the sparse merkle tree of this
-        // version assumes an "append-only" type of update scheme by implicitly using
-        // the key's position to chose zero-hashes, we can't.
+		bytes32 ROOT3 = StateTree.write(proofs1, bits, 1, NEXT_LEAF_HASH, PREV_LEAF_HASH, ROOT2);
 
 		bytes32 UPDATE_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000002;
 		bytes32 UPDATE_LEAF_HASH = keccak256(abi.encode(UPDATE_LEAF));
+        uint8 bits2 = genMapVal(1, 0);
 		bytes32[] memory proofs2 = new bytes32[](1);
         proofs2[0] = NEXT_LEAF_HASH;
-		bytes32 ROOT4 = StateTree.write(proofs, 0, UPDATE_LEAF_HASH, NEXT_LEAF_HASH, ROOT3);
+		bytes32 ROOT4 = StateTree.write(proofs2, bits2, 0, UPDATE_LEAF_HASH, proofs2[0], ROOT3);
 	}
 }
