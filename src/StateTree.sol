@@ -13,44 +13,55 @@ library StateTree {
 
 	function validate(
 		bytes32[] memory _proofs,
+        uint8 _bits,
       	uint256 _index,
       	bytes32 _leaf,
 	 	bytes32 _expectedRoot
 	) internal pure returns (bool) {
-		return (compute(_proofs, _index, _leaf) == _expectedRoot);
+		return (compute(_proofs, _bits, _index, _leaf) == _expectedRoot);
 	}
 
 	function write(
 		bytes32[] memory _proofs,
+        uint8 _bits,
       	uint256 _index,
 	 	bytes32 _nextLeaf,
       	bytes32 _prevLeaf,
 		bytes32 _prevRoot
 	) internal pure returns (bytes32) {
 		require(
-			validate(_proofs, _index, _prevLeaf, _prevRoot),
+			validate(_proofs, _bits, _index, _prevLeaf, _prevRoot),
 		  	"update proof not valid"
 		);
-		return compute(_proofs, _index, _nextLeaf);
+		return compute(_proofs, _bits, _index, _nextLeaf);
 	}
 
 	function compute(
       bytes32[] memory _proofs,
+      uint8 _bits,
       uint256 _index,
       bytes32 _leaf
     ) internal pure returns (bytes32) {
         require(_index < (2**DEPTH) - 1, "_index bigger than tree size");
         require(_proofs.length <= DEPTH, "Invalid _proofs length");
 		bytes32 hash = _leaf;
+        bytes32 proofElement;
 
      	for (uint256 d = 0; d < DEPTH; d++) {
+            if ((_bits & 1) == 1) {
+        	    proofElement = _proofs[d];
+            } else {
+                proofElement = get(d);
+            }
+
         	if ((_index & 1) == 1) {
-         		hash = keccak256(abi.encode(_proofs[d], hash));
+         		hash = keccak256(abi.encode(proofElement, hash));
         	} else {
-          		hash = keccak256(abi.encode(hash, get(d)));
+          		hash = keccak256(abi.encode(hash, proofElement));
         	}
 
-        	_index /= 2;
+            _bits = _bits / 2;
+        	_index = _index / 2;
       	}
 		return hash;
     }
