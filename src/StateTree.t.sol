@@ -138,4 +138,31 @@ contract StateTreeTest is DSTest {
 	    bytes32 newRoot = StateTree.write(proofs, 0, LEAF_HASH, ZERO_LEAF_HASH, ZERO_LEAF_HASH);
         assertEq(newRoot, LEAF_HASH);
     }
+
+	function testUpdatingFirstEntryAfterAdditionalWrite() public {
+		bytes32[] memory proofs = new bytes32[](0);
+
+		bytes32 NEXT_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
+		bytes32 NEXT_LEAF_HASH = keccak256(abi.encode(NEXT_LEAF));
+
+		bytes32 PREV_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
+		bytes32 PREV_LEAF_HASH = keccak256(abi.encode(PREV_LEAF));
+
+		bytes32 ROOT1 = StateTree.empty();
+		bytes32 ROOT2 = StateTree.write(proofs, 0, NEXT_LEAF_HASH, PREV_LEAF_HASH, ROOT1);
+
+		bytes32[] memory proofs1 = new bytes32[](1);
+        proofs1[0] = NEXT_LEAF_HASH;
+		bytes32 ROOT3 = StateTree.write(proofs1, 1, NEXT_LEAF_HASH, PREV_LEAF_HASH, ROOT2);
+        // NOTE: Now, we'd like to go back to leaf of index 0 and update it's
+        // value e.g. from "1" to "2". But since the sparse merkle tree of this
+        // version assumes an "append-only" type of update scheme by implicitly using
+        // the key's position to chose zero-hashes, we can't.
+
+		bytes32 UPDATE_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000002;
+		bytes32 UPDATE_LEAF_HASH = keccak256(abi.encode(UPDATE_LEAF));
+		bytes32[] memory proofs2 = new bytes32[](1);
+        proofs2[0] = NEXT_LEAF_HASH;
+		bytes32 ROOT4 = StateTree.write(proofs, 0, UPDATE_LEAF_HASH, NEXT_LEAF_HASH, ROOT3);
+	}
 }
