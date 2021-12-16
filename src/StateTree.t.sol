@@ -6,6 +6,27 @@ import "./StateTree.sol";
 
 contract StateTreeTest is DSTest {
     function setUp() public {}
+
+    function testGasOfGet() public {
+        uint startGas = gasleft();
+        StateTree.get(0);
+        uint endGas = gasleft();
+        emit log_named_uint("gas calling get(uint256 _level)", startGas - endGas);
+    }
+
+    function testGasOfCompute() public {
+		bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
+		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
+        bytes32 emptyTree = StateTree.empty();
+		bytes32[] memory proofs = new bytes32[](0);
+
+        uint startGas = gasleft();
+	    StateTree.validate(proofs, 0, 0, LEAF_HASH, emptyTree);
+        uint endGas = gasleft();
+
+        emit log_named_uint("gas calling compute()", startGas - endGas);
+    }
+
     function testBitwiseProofBitGeneration() public {
         // eval pos 0
         uint8 value = StateTree.bitmap(0);
