@@ -53,22 +53,46 @@ library StateTree {
 		bytes32 hash = _leaf;
         bytes32 proofElement;
 
-     	for (uint256 d = 0; d < DEPTH; d++) {
-            if ((_bits & 1) == 1) {
-        	    proofElement = _proofs[d];
-            } else {
-                proofElement = get(d);
-            }
+        proofElement = get(0);
+        hash = keccak256(abi.encode(hash, proofElement));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
 
-        	if ((_index & 1) == 1) {
-         		hash = keccak256(abi.encode(proofElement, hash));
-        	} else {
-          		hash = keccak256(abi.encode(hash, proofElement));
-        	}
+        proofElement = _proofs[1];
+        hash = keccak256(abi.encode(proofElement, hash));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
 
-            _bits = _bits >> 1;
-        	_index = _index >> 1;
-      	}
+        proofElement = get(2);
+        hash = keccak256(abi.encode(hash, proofElement));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
+
+        proofElement = _proofs[3];
+        hash = keccak256(abi.encode(proofElement, hash));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
+
+        proofElement = get(4);
+        hash = keccak256(abi.encode(hash, proofElement));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
+
+        proofElement = _proofs[5];
+        hash = keccak256(abi.encode(proofElement, hash));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
+
+        proofElement = get(6);
+        hash = keccak256(abi.encode(hash, proofElement));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
+
+        proofElement = _proofs[7];
+        hash = keccak256(abi.encode(proofElement, hash));
+        _bits = _bits >> 1;
+        _index = _index >> 1;
+        
 		return hash;
     }
 }
