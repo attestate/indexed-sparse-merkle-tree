@@ -9,7 +9,7 @@ library StateTree {
     }
 
     function bitmap(uint256 index) internal pure returns (uint8) {
-        uint8 bytePos = (uint8(bufLength) - 1) - (uint8(index) / 8);
+        uint8 bytePos = (uint8(bufLength) - 1) - (uint8(index) >> 3);
         return bytePos + 1 << (uint8(index) % 8);
     }
 
