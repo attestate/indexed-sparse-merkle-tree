@@ -66,8 +66,8 @@ library StateTree {
           		hash = keccak256(abi.encode(hash, proofElement));
         	}
 
-            _bits = _bits / 2;
-        	_index = _index / 2;
+            _bits = _bits >> 1;
+        	_index = _index >> 1;
       	}
 		return hash;
     }
