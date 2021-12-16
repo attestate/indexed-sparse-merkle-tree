@@ -6,6 +6,27 @@ import "./StateTree.sol";
 
 contract StateTreeTest is DSTest {
     function setUp() public {}
+
+    function testGasOfGet() public {
+        uint startGas = gasleft();
+        StateTree.get(0);
+        uint endGas = gasleft();
+        emit log_named_uint("gas calling get(uint256 _level)", startGas - endGas);
+    }
+
+    function testGasOfCompute() public {
+		bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
+		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
+        bytes32 emptyTree = StateTree.empty();
+		bytes32[] memory proofs = new bytes32[](0);
+
+        uint startGas = gasleft();
+	    StateTree.validate(proofs, 0, 0, LEAF_HASH, emptyTree);
+        uint endGas = gasleft();
+
+        emit log_named_uint("gas calling compute()", startGas - endGas);
+    }
+
     function testBitwiseProofBitGeneration() public {
         // eval pos 0
         uint8 value = StateTree.bitmap(0);
@@ -81,7 +102,8 @@ contract StateTreeTest is DSTest {
 		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
 
 		bytes32 expectedRoot = LEAF_HASH;
-     	for (uint256 i = 0; i < StateTree.DEPTH; i++) {
+        uint DEPTH = 8;
+     	for (uint256 i = 0; i < DEPTH; i++) {
 			expectedRoot = keccak256(abi.encode(expectedRoot, StateTree.get(i)));
 		}
 
@@ -98,10 +120,14 @@ contract StateTreeTest is DSTest {
 		bytes32 PREV_LEAF_HASH = keccak256(abi.encode(PREV_LEAF));
 
 		bytes32 PREV_ROOT = StateTree.empty();
+        uint startGas = gasleft();
 		bytes32 NEXT_ROOT = StateTree.write(proofs, 0, 0, NEXT_LEAF_HASH, PREV_LEAF_HASH, PREV_ROOT);
+        uint endGas = gasleft();
+        emit log_named_uint("gas calling first write()", startGas - endGas);
 
 		bytes32 expectedRoot = NEXT_LEAF_HASH;
-     	for (uint256 i = 0; i < StateTree.DEPTH; i++) {
+        uint DEPTH = 8;
+     	for (uint256 i = 0; i < DEPTH; i++) {
 			expectedRoot = keccak256(abi.encode(expectedRoot, StateTree.get(i)));
 		}
 		assertEq(NEXT_ROOT, expectedRoot);
@@ -126,7 +152,7 @@ contract StateTreeTest is DSTest {
 	}
 
 	function testFillUpTree() public {
-		uint256 DEPTH = StateTree.DEPTH;
+		uint256 DEPTH = 8;
 	    bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
 		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
 		bytes32 ZERO_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
@@ -166,7 +192,7 @@ contract StateTreeTest is DSTest {
 
 
 	function testFillUp() public {
-		uint256 DEPTH = StateTree.DEPTH;
+		uint256 DEPTH = 8;
 	    bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
 		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
 		bytes32 ZERO_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
