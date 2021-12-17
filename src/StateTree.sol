@@ -65,6 +65,14 @@ library StateTree {
 		return compute(_proofs, _bits, _index, _nextLeaf);
 	}
 
+    function aggrFirst(bytes32 aggregate, bytes32 elem) internal pure returns (bytes32) {
+        return keccak256(abi.encode(aggregate, elem));
+    }
+
+    function aggrLast(bytes32 aggregate, bytes32 elem) internal pure returns (bytes32) {
+        return keccak256(abi.encode(elem, aggregate));
+    }
+
 	function compute(
       bytes32[] memory _proofs,
       uint8 _bits,
@@ -74,24 +82,33 @@ library StateTree {
         require(_index < SIZE, "_index bigger than tree size");
         require(_proofs.length <= DEPTH, "Invalid _proofs length");
 
-     	for (uint256 d = 0; d < DEPTH; d++) {
-        	if ((_index & 1) == 1) {
-              if ((_bits & 1) == 1) {
-         	    _leaf = keccak256(abi.encode(_proofs[d], _leaf));
-              } else {
-         	    _leaf = keccak256(abi.encode(hashes(d), _leaf));
-              }
-        	} else {
-              if ((_bits & 1) == 1) {
-          		_leaf = keccak256(abi.encode(_leaf, _proofs[d]));
-              } else {
-          		_leaf = keccak256(abi.encode(_leaf, hashes(d)));
-              }
-        	}
+        function(bytes32, bytes32) internal pure returns (bytes32) f;
+        if ((_index & 1) == 1) {
+            f = aggrFirst;
+        } else {
+            f = aggrLast;
+        }
 
-            _bits = _bits >> 1;
-        	_index = _index >> 1;
-      	}
+        if((_bits & 1) == 1) {
+            _leaf = f(_proofs[0], _leaf);
+            _leaf = f(_proofs[1], _leaf);
+            _leaf = f(_proofs[2], _leaf);
+            _leaf = f(_proofs[3], _leaf);
+            _leaf = f(_proofs[4], _leaf);
+            _leaf = f(_proofs[5], _leaf);
+            _leaf = f(_proofs[6], _leaf);
+            _leaf = f(_proofs[7], _leaf);
+      	} else {
+            _leaf = f(hashes(0), _leaf);
+            _leaf = f(hashes(1), _leaf);
+            _leaf = f(hashes(2), _leaf);
+            _leaf = f(hashes(3), _leaf);
+            _leaf = f(hashes(4), _leaf);
+            _leaf = f(hashes(5), _leaf);
+            _leaf = f(hashes(6), _leaf);
+            _leaf = f(hashes(7), _leaf);
+        }
+
 		return _leaf;
     }
 }
