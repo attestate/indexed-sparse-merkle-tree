@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-only
+// Copyright (c) Tim Daubenschütz.
 pragma solidity ^0.8.6;
 
 uint256 constant SIZE = 255;
