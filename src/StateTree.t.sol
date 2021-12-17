@@ -43,10 +43,44 @@ contract StateTreeTest is DSTest {
         assertEq(value % 2, 0);
     }
 
-    function testGettingZero() public {
+    function testGasCostEmpty() public {
+        uint startGas = gasleft();
         bytes32 empty = StateTree.empty();
+        uint endGas = gasleft();
+        emit log_named_uint("empty()", startGas - endGas);
 		assertEq(empty, 0);
     }
+
+    function testGasCostCompute() public {
+		bytes32[] memory proofs = new bytes32[](0);
+
+        uint startGas = gasleft();
+		StateTree.compute(proofs, 0, 0, 0);
+        uint endGas = gasleft();
+        emit log_named_uint("compute() best case", startGas - endGas);
+    }
+
+    function testGasCostValidate() public {
+		bytes32[] memory proofs = new bytes32[](0);
+
+        uint startGas = gasleft();
+		StateTree.validate(proofs, 0, 0, 0, 0);
+        uint endGas = gasleft();
+        emit log_named_uint("validate() best case", startGas - endGas);
+    }
+
+	function testGasWrite() public {
+		bytes32[] memory proofs = new bytes32[](0);
+
+		bytes32 NEXT_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
+		bytes32 NEXT_LEAF_HASH = keccak256(abi.encode(NEXT_LEAF));
+
+		bytes32 PREV_ROOT = StateTree.empty();
+        uint startGas = gasleft();
+		StateTree.write(proofs, 0, 0, NEXT_LEAF_HASH, 0, PREV_ROOT);
+        uint endGas = gasleft();
+        emit log_named_uint("write best case()", startGas - endGas);
+	}
 
 	function testComputeEmpty() public {
 		bytes32[] memory proofs = new bytes32[](0);
@@ -83,10 +117,7 @@ contract StateTreeTest is DSTest {
 		bytes32 NEXT_LEAF_HASH = keccak256(abi.encode(NEXT_LEAF));
 
 		bytes32 PREV_ROOT = StateTree.empty();
-        uint startGas = gasleft();
 		bytes32 NEXT_ROOT = StateTree.write(proofs, 0, 0, NEXT_LEAF_HASH, 0, PREV_ROOT);
-        uint endGas = gasleft();
-        emit log_named_uint("gas calling first write()", startGas - endGas);
 
 		bytes32 expectedRoot = NEXT_LEAF_HASH;
      	for (uint256 i = 0; i < DEPTH; i++) {

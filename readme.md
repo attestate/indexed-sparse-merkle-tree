@@ -5,7 +5,7 @@
 [![lint: prettier-solidity](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/lint.yml/badge.svg)](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/lint.yml) [![unit tests](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/main.yml/badge.svg)](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/main.yml)
 
 ### A dapptools-ready and gas-optimized implementation of a sparse merkle tree in Solidity. 
-#### [Installation](readme.md/#Installation) | [Usage](readme.md/#Usage) | [Contributing](readme.md/#Contributing)
+#### [Installation](readme.md/#Installation) | [Usage](readme.md/#Usage) | [Contributing](readme.md/#Contributing) | [Gas-usage Benchmark Results](.gas-benchmark)
 
 ## Why use it?
 

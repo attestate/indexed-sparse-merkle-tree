@@ -1,0 +1,30 @@
+Running 4 tests for src/StateTree.t.sol:StateTreeTest
+[32m[PASS][0m testGasCostEmpty() (gas: 2702)
+[32m[PASS][0m testGasWrite() (gas: 13173)
+[32m[PASS][0m testGasCostCompute() (gas: 6315)
+[32m[PASS][0m testGasCostValidate() (gas: 6456)
+
+Success: testGasCostValidate
+  
+  validate() best case: 3750
+  
+
+
+Success: testGasCostCompute
+  
+  compute() best case: 3675
+  
+
+
+Success: testGasWrite
+  
+  write best case(): 10124
+  
+
+
+Success: testGasCostEmpty
+  
+  empty(): 62
+  
+
+
