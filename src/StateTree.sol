@@ -32,7 +32,7 @@ library StateTree {
     }
 
     function bitmap(uint256 index) internal pure returns (uint8) {
-        uint8 bytePos = (uint8(BUFFER_LENGTH) - 1) - (uint8(index) / 8);
+        uint8 bytePos = (uint8(BUFFER_LENGTH) - 1) - (uint8(index) >> 3);
         return bytePos + 1 << (uint8(index) % 8);
     }
 
@@ -71,27 +71,62 @@ library StateTree {
       uint256 _index,
       bytes32 _leaf
     ) internal pure returns (bytes32) {
+
         require(_index < SIZE, "_index bigger than tree size");
         require(_proofs.length <= DEPTH, "Invalid _proofs length");
 
-     	for (uint256 d = 0; d < DEPTH; d++) {
-        	if ((_index & 1) == 1) {
-              if ((_bits & 1) == 1) {
-         	    _leaf = keccak256(abi.encode(_proofs[d], _leaf));
-              } else {
-         	    _leaf = keccak256(abi.encode(hashes(d), _leaf));
-              }
-        	} else {
-              if ((_bits & 1) == 1) {
-          		_leaf = keccak256(abi.encode(_leaf, _proofs[d]));
-              } else {
-          		_leaf = keccak256(abi.encode(_leaf, hashes(d)));
-              }
-        	}
+        function(bytes32, bytes32) internal pure returns (bytes32) f1;
+        function(bytes32, bytes32) internal pure returns (bytes32) f2;
 
-            _bits = _bits >> 1;
-        	_index = _index >> 1;
-      	}
-		return _leaf;
+        function(uint, bytes32[] memory) internal pure returns (bytes32) p1;
+        function(uint, bytes32[] memory) internal pure returns (bytes32) p2;
+
+        if ((_index & 1) == 1) {
+            f1 = getLeafPA;
+            f2 = getLeafAP;
+        }
+        else {
+            f1 = getLeafAP;
+            f2 = getLeafPA;
+        }
+
+        if ((_bits & 1) == 1) {
+            p1 = getProof;
+            p2 = getHash;
+        }
+        else {
+            p1 = getHash;
+            p2 = getProof;
+        }
+        
+        bytes32 hash = _leaf;
+        bytes32 proofElement;
+
+
+        proofElement = p1(0, _proofs);
+        hash = f1(proofElement, hash);
+
+        proofElement = p2(1, _proofs);
+        hash = f2(proofElement, hash);
+
+        proofElement = p1(2, _proofs);
+        hash = f1(proofElement, hash);
+
+        proofElement = p2(3, _proofs);
+        hash = f2(proofElement, hash);
+
+        proofElement = p1(4, _proofs);
+        hash = f1(proofElement, hash);
+
+        proofElement = p2(5, _proofs);
+        hash = f2(proofElement, hash);
+
+        proofElement = p1(6, _proofs);
+        hash = f1(proofElement, hash);
+
+        proofElement = p2(7, _proofs);
+        hash = f2(proofElement, hash);
+
+		return hash;
     }
 }
