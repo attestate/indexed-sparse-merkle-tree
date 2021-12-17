@@ -64,6 +64,22 @@ library StateTree {
 		);
 		return compute(_proofs, _bits, _index, _nextLeaf);
 	}
+    
+    function getLeafPA(bytes32 proof, bytes32 hash) internal pure returns (bytes32) {
+        return keccak256(abi.encode(proof, hash));
+    }
+
+    function getLeafAP(bytes32 proof, bytes32 hash) internal pure returns (bytes32) {
+        return keccak256(abi.encode(hash, proof));
+    }
+
+    function getProof(uint index, bytes32[] memory proofs) internal pure returns (bytes32) {
+        return proofs[index];
+    }
+    
+    function getHash(uint index, bytes32[] memory dummy) internal pure returns (bytes32) {
+        return hashes(index);
+    }
 
 	function compute(
       bytes32[] memory _proofs,
