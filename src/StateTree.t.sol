@@ -8,19 +8,6 @@ import "./StateTree.sol";
 contract StateTreeTest is DSTest {
     function setUp() public {}
 
-    function testGasOfCompute() public {
-		bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
-		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
-        bytes32 emptyTree = StateTree.empty();
-		bytes32[] memory proofs = new bytes32[](0);
-
-        uint startGas = gasleft();
-	    StateTree.validate(proofs, 0, 0, LEAF_HASH, emptyTree);
-        uint endGas = gasleft();
-
-        emit log_named_uint("gas calling compute()", startGas - endGas);
-    }
-
     function testBitwiseProofBitGeneration() public {
         // eval pos 0
         uint8 value = StateTree.bitmap(0);
@@ -71,9 +58,6 @@ contract StateTreeTest is DSTest {
 	function testValidateEmpty() public {
 		bytes32[] memory proofs = new bytes32[](0);
 
-		bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000000;
-		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
-
 		bytes32 expectedRoot = StateTree.empty();
 		assertTrue(StateTree.validate(proofs, 0, 0, 0, expectedRoot));
 	}
@@ -85,7 +69,6 @@ contract StateTreeTest is DSTest {
 		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
 
 		bytes32 expectedRoot = LEAF_HASH;
-        uint DEPTH = 8;
      	for (uint256 i = 0; i < DEPTH; i++) {
 			expectedRoot = keccak256(abi.encode(expectedRoot, 0));
 		}
@@ -106,14 +89,13 @@ contract StateTreeTest is DSTest {
         emit log_named_uint("gas calling first write()", startGas - endGas);
 
 		bytes32 expectedRoot = NEXT_LEAF_HASH;
-        uint DEPTH = 8;
      	for (uint256 i = 0; i < DEPTH; i++) {
 			expectedRoot = keccak256(abi.encode(expectedRoot, 0));
 		}
 		assertEq(NEXT_ROOT, expectedRoot);
 	}
 
-	function testWriteTwo() public {
+	function testWriteTwo() public pure {
 		bytes32[] memory proofs = new bytes32[](0);
 
 		bytes32 NEXT_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
@@ -125,16 +107,14 @@ contract StateTreeTest is DSTest {
         uint8 bits = StateTree.bitmap(0);
 		bytes32[] memory proofs1 = new bytes32[](1);
         proofs1[0] = NEXT_LEAF_HASH;
-		bytes32 ROOT3 = StateTree.write(proofs1, bits, 1, NEXT_LEAF_HASH, 0, ROOT2);
+		StateTree.write(proofs1, bits, 1, NEXT_LEAF_HASH, 0, ROOT2);
 	}
 
-	function testFillUpTree() public {
-		uint256 DEPTH = 8;
+	function testFillUpTree() public pure {
 	    bytes32 LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
 		bytes32 LEAF_HASH = keccak256(abi.encode(LEAF));
 
         bytes32[] memory ones = new bytes32[](DEPTH);
-        bytes32 hashOnes = LEAF_HASH;
         ones[0] = LEAF_HASH;
         ones[1] = keccak256(abi.encode(ones[0], ones[0]));
         ones[2] = keccak256(abi.encode(ones[1], ones[1]));
@@ -176,7 +156,7 @@ contract StateTreeTest is DSTest {
         assertEq(newRoot, LEAF_HASH);
     }
 
-	function testUpdatingFirstEntryAfterAdditionalWrite() public {
+	function testUpdatingFirstEntryAfterAdditionalWrite() public pure {
 		bytes32[] memory proofs = new bytes32[](0);
 
 		bytes32 NEXT_LEAF = 0x0000000000000000000000000000000000000000000000000000000000000001;
@@ -195,6 +175,6 @@ contract StateTreeTest is DSTest {
         uint8 bits2 = StateTree.bitmap(0);
 		bytes32[] memory proofs2 = new bytes32[](1);
         proofs2[0] = NEXT_LEAF_HASH;
-		bytes32 ROOT4 = StateTree.write(proofs2, bits2, 0, UPDATE_LEAF_HASH, proofs2[0], ROOT3);
+		StateTree.write(proofs2, bits2, 0, UPDATE_LEAF_HASH, proofs2[0], ROOT3);
 	}
 }
