@@ -57,25 +57,21 @@ library StateTree {
     ) internal pure returns (bytes32) {
         require(_index < SIZE, "_index bigger than tree size");
         require(_proofs.length <= DEPTH, "Invalid _proofs length");
-
-     	for (uint256 d = 0; d < DEPTH; d++) {
-        	if ((_index & 1) == 1) {
-              if ((_bits & 1) == 1) {
-                _leaf = hash(_proofs[d], _leaf);
-              } else {
-                _leaf = hash(0, _leaf);
-              }
-        	} else {
-              if ((_bits & 1) == 1) {
-                _leaf = hash(_leaf, _proofs[d]);
-              } else {
-                _leaf = hash(_leaf, 0);
-              }
-        	}
-
+        bytes32 proofElement;
+        for (uint256 d = 0; d < DEPTH; d++) {
+            if ((_bits & 1) == 1) {
+                proofElement = _proofs[d];
+            } else {
+                proofElement = 0;
+            }
+            if ((_index & 1) == 1) {
+                _leaf = hash(proofElement, _leaf);
+            } else {
+                _leaf = hash(_leaf, proofElement);
+            }
             _bits = _bits >> 1;
-        	_index = _index >> 1;
-      	}
-		return _leaf;
+            _index = _index >> 1;
+        }
+        return _leaf;
     }
 }
