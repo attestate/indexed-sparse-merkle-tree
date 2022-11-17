@@ -2,7 +2,7 @@
   <img src="/assets/logo.png" />
 </p>
 
-[![lint: prettier-solidity](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/lint.yml/badge.svg)](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/lint.yml) [![unit tests](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/main.yml/badge.svg)](https://github.com/rugpullindex/indexed-sparse-merkle-tree/actions/workflows/main.yml)
+[![lint: prettier-solidity](https://github.com/attestate/indexed-sparse-merkle-tree/actions/workflows/lint.yml/badge.svg)](https://github.com/attestate/indexed-sparse-merkle-tree/actions/workflows/lint.yml) [![unit tests](https://github.com/attestate/indexed-sparse-merkle-tree/actions/workflows/main.yml/badge.svg)](https://github.com/attestate/indexed-sparse-merkle-tree/actions/workflows/main.yml)
 
 ### A dapptools-ready and gas-optimized implementation of a sparse merkle tree in Solidity. 
 #### [Installation](readme.md/#Installation) | [Usage](readme.md/#Usage) | [Contributing](readme.md/#Contributing) | [Gas-usage Benchmark Results](.gas-benchmark)
@@ -24,7 +24,7 @@
 ### Including as a dapptools dependency
 
 ```bash
-dapp install rugpullindex/indexed-sparse-merkle-tree
+dapp install attestate/indexed-sparse-merkle-tree
 ```
 
 Once you've done that, you can use the `StateTree.sol` contract class
